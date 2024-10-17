@@ -154,7 +154,7 @@ public class MySQL implements SQLInterface {
     }
 
     @Override
-    public void updateRow(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception {
+    public void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception {
         try (Connection connection = this.hikariDS.getConnection()) {
             String sql = "UPDATE `" + tableName + "` SET `" + column + "` = '" + value + "' WHERE `" + columnKey + "` " + conditional + " '" + valueKey + "';";
             if (log) LOGGER.info(sql);

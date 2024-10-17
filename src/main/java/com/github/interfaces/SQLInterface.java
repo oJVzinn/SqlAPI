@@ -18,6 +18,6 @@ public interface SQLInterface {
     List<Map<String, Object>> selectAll(String tableName, boolean log) throws Exception;
     void deleteRow(String tableName, String columnKey, String valueKey, String conditional, boolean log) throws Exception;
     void deleteAllRow(String tableName, boolean log) throws Exception;
-    void updateRow(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception;
+    void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception;
 
 }

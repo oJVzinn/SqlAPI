@@ -9,8 +9,8 @@ public class Main {
         HikariModel model = new HikariModel();
         MySQL mySQL = new MySQL("localhost", "3306", "root", "", "test");
         model.setupDefaultConfiguration();
+        SQLManager.setLogSQL(true);
         try {
-            SQLManager.setLogSQL(true);
             SQLManager.initSQL(mySQL, model);
         } catch (Exception e) {
             throw new RuntimeException(e);

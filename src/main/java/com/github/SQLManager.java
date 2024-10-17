@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class SQLManager {
 
+    @Setter
     private static SQLInterface instance;
 
     @Setter
@@ -54,8 +55,8 @@ public class SQLManager {
         instance.deleteAllRow(tableName, logSQL);
     }
 
-    public static void updateRow(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception {
-        instance.updateRow(tableName, column, value, columnKey, valueKey, conditional, logSQL);
+    public static void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional) throws Exception {
+        instance.updateColumn(tableName, column, value, columnKey, valueKey, conditional, logSQL);
     }
 
     public static <T extends SQLInterface> T getInstance(Class<T> classParse) {
@@ -65,6 +66,5 @@ public class SQLManager {
 
         return classParse.cast(instance);
     }
-
 
 }
