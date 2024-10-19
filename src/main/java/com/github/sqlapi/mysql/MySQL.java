@@ -1,10 +1,10 @@
-package com.github.mysql;
+package com.github.sqlapi.mysql;
 
-import com.github.interfaces.SQLInterface;
-import com.github.logger.SQLogger;
-import com.github.model.HikariModel;
-import com.github.model.InsertModel;
-import com.github.model.TableModel;
+import com.github.sqlapi.interfaces.SQLInterface;
+import com.github.sqlapi.logger.SQLogger;
+import com.github.sqlapi.model.HikariModel;
+import com.github.sqlapi.model.InsertModel;
+import com.github.sqlapi.model.TableModel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.NonNull;
@@ -106,26 +106,22 @@ public class MySQL implements SQLInterface {
     }
 
     @Override
+    public List<Map<String, Object>> selectAll(String tableName, String columnKey, String valueKey, String conditional, boolean log) throws Exception {
+        List<Map<String, Object>> result;
+        try (Connection connection = this.hikariDS.getConnection()) {
+            String sql = "SELECT * FROM " + tableName + " WHERE `" + columnKey + "` " + conditional + " '" + valueKey + "';";
+            result = getAllResults(sql, connection, log);
+        }
+
+        return result;
+    }
+
+    @Override
     public List<Map<String, Object>> selectAll(String tableName, boolean log) throws Exception {
-        List<Map<String, Object>> result = new ArrayList<>();
+        List<Map<String, Object>> result;
         try (Connection connection = this.hikariDS.getConnection()) {
             String sql = "SELECT * FROM " + tableName;
-            if (log) LOGGER.info(sql);
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    ResultSetMetaData metaData = resultSet.getMetaData();
-                    int columnCount = metaData.getColumnCount();
-                    while (resultSet.next()) {
-                        Map<String, Object> mapResult = new HashMap<>();
-                        for (int i = 1; i <= columnCount; i++) {
-                            String columnName = metaData.getColumnName(i);
-                            Object value = resultSet.getObject(i);
-                            mapResult.put(columnName, value);
-                        }
-                        result.add(mapResult);
-                    }
-                }
-            }
+            result = getAllResults(sql, connection, log);
         }
 
         return result;
@@ -164,4 +160,25 @@ public class MySQL implements SQLInterface {
         }
     }
 
+    private List<Map<String, Object>> getAllResults(String SQL, Connection connection, boolean log) throws Exception {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (log) LOGGER.info(SQL);
+        try (PreparedStatement statement = connection.prepareStatement(SQL)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                ResultSetMetaData metaData = resultSet.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                while (resultSet.next()) {
+                    Map<String, Object> mapResult = new HashMap<>();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = metaData.getColumnName(i);
+                        Object value = resultSet.getObject(i);
+                        mapResult.put(columnName, value);
+                    }
+                    result.add(mapResult);
+                }
+            }
+        }
+
+        return result;
+    }
 }

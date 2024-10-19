@@ -1,4 +1,4 @@
-package com.github.model;
+package com.github.sqlapi.model;
 
 import com.zaxxer.hikari.HikariConfig;
 import lombok.Getter;

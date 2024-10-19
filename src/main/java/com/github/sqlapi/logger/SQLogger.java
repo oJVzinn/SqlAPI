@@ -1,4 +1,4 @@
-package com.github.logger;
+package com.github.sqlapi.logger;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;

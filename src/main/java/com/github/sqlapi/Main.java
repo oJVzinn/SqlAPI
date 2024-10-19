@@ -1,7 +1,7 @@
-package com.github;
+package com.github.sqlapi;
 
-import com.github.model.HikariModel;
-import com.github.mysql.MySQL;
+import com.github.sqlapi.model.HikariModel;
+import com.github.sqlapi.mysql.MySQL;
 
 public class Main {
 

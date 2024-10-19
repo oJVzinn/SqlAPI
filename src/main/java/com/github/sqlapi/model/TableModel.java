@@ -1,4 +1,4 @@
-package com.github.model;
+package com.github.sqlapi.model;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

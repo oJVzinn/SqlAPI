@@ -1,9 +1,9 @@
-package com.github;
+package com.github.sqlapi;
 
-import com.github.interfaces.SQLInterface;
-import com.github.model.HikariModel;
-import com.github.model.InsertModel;
-import com.github.model.TableModel;
+import com.github.sqlapi.interfaces.SQLInterface;
+import com.github.sqlapi.model.HikariModel;
+import com.github.sqlapi.model.InsertModel;
+import com.github.sqlapi.model.TableModel;
 import lombok.Setter;
 
 import java.util.List;
@@ -41,6 +41,10 @@ public class SQLManager {
 
     public static List<Object> selectValue(String tableName, String column, String columnKey, String valueKey, String conditional) throws Exception {
         return instance.selectValue(tableName, column, columnKey, valueKey, conditional, logSQL);
+    }
+
+    public static List<Map<String, Object>> selectAll(String tableName, String columnKey, String valueKey, String conditional) throws Exception {
+        return instance.selectAll(tableName, columnKey, valueKey, conditional, logSQL);
     }
 
     public static List<Map<String, Object>> selectAll(String tableName) throws Exception {
