@@ -3,6 +3,7 @@ package com.github.sqlapi.interfaces;
 import com.github.sqlapi.model.HikariModel;
 import com.github.sqlapi.model.InsertModel;
 import com.github.sqlapi.model.TableModel;
+import com.github.sqlapi.model.UpdateModel;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +21,6 @@ public interface SQLInterface {
     void deleteRow(String tableName, String columnKey, String valueKey, String conditional, boolean log) throws Exception;
     void deleteAllRow(String tableName, boolean log) throws Exception;
     void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception;
+    void updateColumns(UpdateModel model, boolean log) throws Exception;
 
 }

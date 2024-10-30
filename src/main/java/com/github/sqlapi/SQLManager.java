@@ -4,6 +4,7 @@ import com.github.sqlapi.interfaces.SQLInterface;
 import com.github.sqlapi.model.HikariModel;
 import com.github.sqlapi.model.InsertModel;
 import com.github.sqlapi.model.TableModel;
+import com.github.sqlapi.model.UpdateModel;
 import lombok.Setter;
 
 import java.util.List;
@@ -61,6 +62,10 @@ public class SQLManager {
 
     public static void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional) throws Exception {
         instance.updateColumn(tableName, column, value, columnKey, valueKey, conditional, logSQL);
+    }
+
+    public static void updateColumns(UpdateModel model) throws Exception {
+        instance.updateColumns(model, logSQL);
     }
 
     public static <T extends SQLInterface> T getInstance(Class<T> classParse) {

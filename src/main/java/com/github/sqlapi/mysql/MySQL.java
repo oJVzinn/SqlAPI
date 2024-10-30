@@ -5,6 +5,7 @@ import com.github.sqlapi.logger.SQLogger;
 import com.github.sqlapi.model.HikariModel;
 import com.github.sqlapi.model.InsertModel;
 import com.github.sqlapi.model.TableModel;
+import com.github.sqlapi.model.UpdateModel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.NonNull;
@@ -153,6 +154,17 @@ public class MySQL implements SQLInterface {
     public void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws Exception {
         try (Connection connection = this.hikariDS.getConnection()) {
             String sql = "UPDATE `" + tableName + "` SET `" + column + "` = '" + value + "' WHERE `" + columnKey + "` " + conditional + " '" + valueKey + "';";
+            if (log) LOGGER.info(sql);
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.executeUpdate();
+            }
+        }
+    }
+
+    @Override
+    public void updateColumns(UpdateModel model, boolean log) throws Exception {
+        try (Connection connection = this.hikariDS.getConnection()) {
+            String sql = model.makeSQLCommand();
             if (log) LOGGER.info(sql);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.executeUpdate();
