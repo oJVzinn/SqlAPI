@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Code Ignore ###
+/src/test/java/Teste.java
