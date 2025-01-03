@@ -38,4 +38,4 @@ build/
 .DS_Store
 
 # Code Ignore ###
-/src/test/java/Teste.java
+/src/test/
