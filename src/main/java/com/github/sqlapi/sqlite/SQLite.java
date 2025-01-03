@@ -1,4 +1,4 @@
-package com.github.sqlapi.mysql;
+package com.github.sqlapi.sqlite;
 
 import com.github.sqlapi.exeption.ConnectionException;
 import com.github.sqlapi.interfaces.SQLInterface;
@@ -13,46 +13,42 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
-public class MySQL implements SQLInterface {
-
-    @NonNull
-    private String host;
-
-    @NonNull
-    private String port;
-
-    @NonNull
-    private String user;
-
-    @NonNull
-    private String password;
+public class SQLite implements SQLInterface {
 
     @NonNull
     private String database;
 
-    private final SQLogger LOGGER = new SQLogger("MySQL");
+    @NonNull
+    private String dbPatch;
 
+    private final SQLogger LOGGER = new SQLogger("SQLite");
     private HikariDataSource hikariDS;
+
 
     @Override
     public void connect(HikariModel model) throws ConnectionException {
-        LOGGER.info("Connecting to MySQL...");
+        LOGGER.info("Connecting to SQLite...");
         TimeUtils timeUtils = new TimeUtils();
+        createDBFile();
+
         try {
             HikariConfig config = model.getConfig();
-            config.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
-            config.setUsername(this.user);
-            config.setPassword(this.password);
+            config.setJdbcUrl("jdbc:sqlite:" + dbPatch + database + ".db");
             this.hikariDS = new HikariDataSource(config);
         } catch (Exception ex) {
             throw new ConnectionException("Error on create connection: " + ex);
         }
 
-        LOGGER.info("MySQL Connected in " + timeUtils.getTimeElapsed() + "ms");
+        LOGGER.info("SQLite Connected in " + timeUtils.getTimeElapsed() + "ms");
     }
 
     @Override
@@ -187,9 +183,11 @@ public class MySQL implements SQLInterface {
     public void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws SQLException {
         TimeUtils timeUtils = new TimeUtils();
         try (Connection connection = this.hikariDS.getConnection()) {
-            String sql = "UPDATE `" + tableName + "` SET `" + column + "` = '" + value + "' WHERE `" + columnKey + "` " + conditional + " '" + valueKey + "';";
+            String sql = "UPDATE `" + tableName + "` SET `" + column + "` = ? WHERE `" + columnKey + "` " + conditional + " ?;";
             if (log) LOGGER.info(sql);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, value);
+                statement.setString(2, valueKey);
                 statement.executeUpdate();
                 if (log) LOGGER.info("Query execute in " + timeUtils.getTimeElapsed() + "ms");
             }
@@ -227,9 +225,32 @@ public class MySQL implements SQLInterface {
             }
 
             if (log) LOGGER.info("Query execute in " + timeUtils.getTimeElapsed() + "ms");
+
         }
 
         return result;
+    }
+
+    private void createDBFile() {
+        try {
+            File file = new File(this.dbPatch + "/" + this.database + ".db");
+            if (!file.exists()) {
+                File folder = file.getParentFile();
+                if (!folder.exists()) {
+                    if (!folder.mkdirs()) {
+                        LOGGER.severe("Failed to create DB folder.");
+                        throw new IOException("Failed to create DB folder.");
+                    }
+                }
+                if (!file.createNewFile()) {
+                    LOGGER.severe("Failed to create DB file.");
+                    throw new IOException("Failed to create DB file.");
+                }
+            }
+        } catch (IOException ex) {
+            LOGGER.severe("Error while creating DB file: " + ex.getMessage());
+            throw new RuntimeException("Error while creating DB file.", ex);
+        }
     }
 
 }

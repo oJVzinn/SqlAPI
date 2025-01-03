@@ -1,19 +1,19 @@
 package com.github.sqlapi.model;
 
+import com.github.sqlapi.SQLManager;
+import com.github.sqlapi.interfaces.Model;
+import com.github.sqlapi.interfaces.SQLInterface;
+import com.github.sqlapi.sqlite.SQLite;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class TableModel {
+public class TableModel implements Model {
 
     @NonNull
     private String name;
 
     private final StringBuilder sqlBuilder = new StringBuilder();
-
-    public String makeSQLCommand() {
-        return "CREATE TABLE IF NOT EXISTS " + name + " (" + sqlBuilder + ");";
-    }
 
     public void appendPrimaryKey(String column, String type, boolean notNull, boolean autoIncrement, boolean unique) {
         checkIfSetComma();
@@ -22,7 +22,7 @@ public class TableModel {
                 .append(type)
                 .append(" PRIMARY KEY")
                 .append(notNull ? " NOT NULL" : "")
-                .append(autoIncrement ? " AUTO_INCREMENT" : "")
+                .append(autoIncrement ? " " + getAutoIncrement() : "")
                 .append(unique ? " UNIQUE" : "");
     }
 
@@ -38,5 +38,23 @@ public class TableModel {
         if (this.sqlBuilder.length() != 0) {
             this.sqlBuilder.append(", ");
         }
+    }
+
+    private String getAutoIncrement() {
+        if (SQLManager.getInstance(SQLInterface.class) instanceof SQLite) {
+            return "AUTOINCREMENT";
+        }
+
+        return "AUTO_INCREMENT";
+    }
+
+    @Override
+    public String makeSQL() {
+        return "CREATE TABLE IF NOT EXISTS " + name + " (" + sqlBuilder + ");";
+    }
+
+    @Override
+    public <T extends Model> T parse(Class<T> clazz) {
+        return clazz.isInstance(this) ? clazz.cast(this) : null;
     }
 }

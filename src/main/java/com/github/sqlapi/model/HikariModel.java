@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class HikariModel {
 
-    private final HikariConfig config = new HikariConfig();;
+    private final HikariConfig config = new HikariConfig();
 
     public void setupDefaultConfiguration() {
         this.config.addDataSourceProperty("cachePrepStmts", "true");
@@ -24,4 +24,5 @@ public class HikariModel {
         this.config.setValidationTimeout(3000);
         this.config.setMaxLifetime(27000);
     }
+
 }
