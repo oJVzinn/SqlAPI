@@ -6,7 +6,7 @@
 
     <groupId>com.github.sqlapi</groupId>
     <artifactId>SqlAPI</artifactId>
-    <version>0.5</version>
+    <version>0.5.2</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -54,17 +54,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.0</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.0</version>
-            </plugin>
-        </plugins>
-    </build>
 </project>
