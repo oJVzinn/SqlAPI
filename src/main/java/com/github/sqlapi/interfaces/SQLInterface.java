@@ -6,6 +6,7 @@ import com.github.sqlapi.model.InsertModel;
 import com.github.sqlapi.model.TableModel;
 import com.github.sqlapi.model.UpdateModel;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -24,5 +25,6 @@ public interface SQLInterface {
     void deleteAllRow(String tableName, boolean log) throws SQLException;
     void updateColumn(String tableName, String column, String value, String columnKey, String valueKey, String conditional, boolean log) throws SQLException;
     void updateColumns(UpdateModel model, boolean log) throws SQLException;
+    Connection getConnection() throws SQLException;
 
 }

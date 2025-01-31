@@ -209,6 +209,11 @@ public class MySQL implements SQLInterface {
         }
     }
 
+    @Override
+    public Connection getConnection() throws SQLException {
+        return this.hikariDS.getConnection();
+    }
+
     private List<Map<String, Object>> getAllResults(String SQL, PreparedStatement statement, boolean log) throws SQLException {
         TimeUtils timeUtils = new TimeUtils();
         List<Map<String, Object>> result = new ArrayList<>();
