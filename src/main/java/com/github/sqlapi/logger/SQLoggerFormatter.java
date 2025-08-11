@@ -12,7 +12,7 @@ public class SQLoggerFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        return "\n[" + module + "] " + record.getMessage() + "\n";
+        return "[" + module + "] " + record.getMessage() + "\n";
     }
 
 }
