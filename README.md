@@ -3,11 +3,42 @@ Um gerenciador para banco de dados relacionais SQL, com CRUD completo
 
 # Como começar
 
-### Para se utilizar o SqlAPI é bem simples. Aonde todas as funções disponíveis ficam disponíveis na classe "SQLManager", aonde para se utilizar, é necessário apenas instanciar qual cliente SQL é ideal para sua aplicação e sua configuração de preferência do gerenciador de polls, "Hikari".
+Adicione ao seu pom.xml
+```maven
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
+	<dependency>
+	    <groupId>com.github.oJVzinn</groupId>
+	    <artifactId>SqlAPI</artifactId>
+	    <version>0.5.4</version>
+	</dependency>
+```
+
+ou no seu build.gradle
+```gradle
+	dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+dependencies {
+	        implementation 'com.github.oJVzinn:SqlAPI:0.5.4'
+	}
+```
+
+### Para se utilizar o SqlAPI é bem simples. Todas as funções disponíveis ficam disponíveis na classe "SQLManager", aonde para se utilizar, é necessário apenas instanciar qual cliente SQL é ideal para sua aplicação e sua configuração de preferência do gerenciador de polls, "Hikari".
 
 ## Como instanciar o meu cliente SQL de preferência?
 
-### Para se instanciar o seu cliente SQL de preferência é bem simples. Sendo necessário instanciar a classe do gerenciador do client, que neste exemplo, usaremos o "MySQL", configurar o "Hikari" de acordo com sua preferência e iniciar utilizando a função "initSQL", da classe "SQLManager".
+### Neste exemplo usaremos o "MySQL", e para iniciar é necessário configurar o "Hikari" de acordo com sua preferência, após isso é necessário chamar a função "initSQL", da classe "SQLManager".
 
 <br/>
 
